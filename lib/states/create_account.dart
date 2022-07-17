@@ -1,7 +1,11 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:lexproj/models/user_model.dart';
 import 'package:lexproj/utility/my_constant.dart';
 import 'package:lexproj/utility/my_dialog.dart';
 import 'package:lexproj/widgets/show_button.dart';
@@ -89,7 +93,9 @@ class _CareateAccountState extends State<CareateAccount> {
                       MyDialog(context: context).normalDialog(
                           title: 'Have Space?',
                           subTitle: 'Please Fill Every blank');
-                    } else {}
+                    } else {
+                      processCreateNewAccount();
+                    }
                   },
                 ),
               ),
@@ -173,5 +179,55 @@ class _CareateAccountState extends State<CareateAccount> {
       file = File(result.path);
       setState(() {});
     }
+  }
+
+  Future<void> processCreateNewAccount() async {
+    MyDialog(context: context).processDialog();
+
+    await FirebaseAuth.instance
+        .createUserWithEmailAndPassword(email: email!, password: password!)
+        .then((value) async {
+      String uid = value.user!.uid;
+      print('Create new account success uid==>>$uid');
+
+      FirebaseStorage storage = FirebaseStorage.instance;
+      Reference reference = storage.ref().child('image/$uid.jpg');
+      UploadTask uploadTask = reference.putFile(file!);
+      await uploadTask.whenComplete(() async {
+        await reference.getDownloadURL().then((value) async {
+          String pathImage = value;
+          print('UploadTask complete pathImage ==>> $pathImage');
+
+          UserModel userModel = UserModel(
+              name: name!,
+              email: email!,
+              password: password!,
+              pathImage: pathImage);
+
+          await FirebaseFirestore.instance
+              .collection('user')
+              .doc(uid)
+              .set(userModel.toMap())
+              .then((value) {
+                
+            Navigator.pop(context);
+
+            MyDialog(context: context).normalDialog(
+                label2: 'Authen',
+                pressFunc2: () {
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                },
+                title: 'Create account success!',
+                subTitle: 'Welcome to app, Please Authen');
+          });
+        });
+      });
+    }).catchError((error) {
+      Navigator.pop(context);
+
+      MyDialog(context: context)
+          .normalDialog(title: error.code, subTitle: error.message);
+    });
   }
 }

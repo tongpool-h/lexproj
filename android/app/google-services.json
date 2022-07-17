@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "910944454977",
+    "project_id": "lexproj-dc336",
+    "storage_bucket": "lexproj-dc336.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:910944454977:android:1d1ad6050026a7f15779c0",
+        "android_client_info": {
+          "package_name": "com.kmutnb.lexproj"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "910944454977-3bmcpkc5201vvpvlsq2luv3n2e1f7j0m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDt3I2koaChzxSnhcCYNM0tls3NvakJFTc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "910944454977-3bmcpkc5201vvpvlsq2luv3n2e1f7j0m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
