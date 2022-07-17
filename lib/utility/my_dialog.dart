@@ -34,6 +34,7 @@ class MyDialog {
     String? label2,
     Function()? pressFunc1,
     Function()? pressFunc2,
+    Widget? contentWiget,
   }) async {
     showDialog(
       context: context,
@@ -51,6 +52,7 @@ class MyDialog {
           ),
           subtitle: ShowText(text: subTitle),
         ),
+        content: contentWiget ?? const SizedBox(),
         actions: [
           label1 == null
               ? const SizedBox()
